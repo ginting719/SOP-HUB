@@ -1,55 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Podcast Player</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alpro Podcast</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-4">
-  <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6">
-    <h1 class="text-2xl font-bold mb-4">🎧 Podcast Player</h1>
+<body class="bg-zinc-900 text-white font-sans min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-3xl bg-zinc-800 rounded-3xl shadow-lg p-6">
+    <h1 class="text-3xl font-extrabold mb-6 text-green-400">🎧 Alpro Weekly Podcast</h1>
     
     <!-- Audio Player -->
-    <audio id="audioPlayer" controls class="w-full mb-4">
-      <source id="audioSource" src="" type="audio/mpeg">
+    <audio id="audioPlayer" controls class="w-full mb-6 rounded-xl bg-zinc-700">
+      <source id="audioSource" src="" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
 
-    <!-- Search Input -->
+    <!-- Search Box -->
     <input
-      type="text"
       id="searchInput"
+      type="text"
       placeholder="Cari episode..."
-      class="w-full px-4 py-2 mb-4 border rounded-xl focus:outline-none focus:ring"
+      class="w-full px-4 py-2 rounded-lg bg-zinc-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 mb-4"
     />
 
     <!-- Playlist -->
-    <div id="playlist" class="space-y-2 max-h-64 overflow-y-auto pr-2">
-      <!-- Episode items injected here -->
+    <div id="playlist" class="max-h-64 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800">
+      <!-- Playlist items will be inserted here -->
     </div>
   </div>
 
   <script>
     const episodes = [
-      { title: "Episode 1: Apotek", url: "audio/apotek.mp3" },
-      { title: "Episode 2: Tips Produktif", url: "audio/episode2.mp3" },
-      { title: "Episode 3: Belajar Fokus", url: "audio/episode3.mp3" },
-      { title: "Episode 4: Membangun Habit", url: "audio/episode4.mp3" },
-      { title: "Episode 5: Tidur Berkualitas", url: "audio/episode5.mp3" },
+      {
+        title: "Apotek",
+        url: "audio/apotek.mp3"
+      },
+      // Tambahkan lagi jika ada episode baru
     ];
 
-    const playlist = document.getElementById('playlist');
-    const audioPlayer = document.getElementById('audioPlayer');
-    const audioSource = document.getElementById('audioSource');
-    const searchInput = document.getElementById('searchInput');
+    const audioPlayer = document.getElementById("audioPlayer");
+    const audioSource = document.getElementById("audioSource");
+    const playlist = document.getElementById("playlist");
+    const searchInput = document.getElementById("searchInput");
 
     function loadPlaylist(items) {
-      playlist.innerHTML = '';
-      items.forEach((episode, index) => {
-        const btn = document.createElement('button');
+      playlist.innerHTML = "";
+      items.forEach((episode) => {
+        const btn = document.createElement("button");
         btn.textContent = episode.title;
-        btn.className = "block w-full text-left px-4 py-2 rounded-lg hover:bg-blue-100";
+        btn.className =
+          "block w-full text-left px-4 py-3 rounded-lg bg-zinc-700 hover:bg-green-600 transition-colors duration-200";
         btn.onclick = () => {
           audioSource.src = episode.url;
           audioPlayer.load();
@@ -59,13 +60,13 @@
       });
     }
 
-    // Initial load
     loadPlaylist(episodes);
 
-    // Search functionality
-    searchInput.addEventListener('input', function () {
+    searchInput.addEventListener("input", function () {
       const query = this.value.toLowerCase();
-      const filtered = episodes.filter(e => e.title.toLowerCase().includes(query));
+      const filtered = episodes.filter((e) =>
+        e.title.toLowerCase().includes(query)
+      );
       loadPlaylist(filtered);
     });
   </script>
