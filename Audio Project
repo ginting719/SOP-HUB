@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podcast Player</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+  <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-6">
+    <h1 class="text-2xl font-bold mb-4">🎧 Podcast Player</h1>
+    
+    <!-- Audio Player -->
+    <audio id="audioPlayer" controls class="w-full mb-4">
+      <source id="audioSource" src="" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
+    <!-- Search Input -->
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Cari episode..."
+      class="w-full px-4 py-2 mb-4 border rounded-xl focus:outline-none focus:ring"
+    />
+
+    <!-- Playlist -->
+    <div id="playlist" class="space-y-2 max-h-64 overflow-y-auto pr-2">
+      <!-- Episode items injected here -->
+    </div>
+  </div>
+
+  <script>
+    const episodes = [
+      { title: "Episode 1: Memulai Podcast", url: "audio/episode1.mp3" },
+      { title: "Episode 2: Tips Produktif", url: "audio/episode2.mp3" },
+      { title: "Episode 3: Belajar Fokus", url: "audio/episode3.mp3" },
+      { title: "Episode 4: Membangun Habit", url: "audio/episode4.mp3" },
+      { title: "Episode 5: Tidur Berkualitas", url: "audio/episode5.mp3" },
+    ];
+
+    const playlist = document.getElementById('playlist');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const audioSource = document.getElementById('audioSource');
+    const searchInput = document.getElementById('searchInput');
+
+    function loadPlaylist(items) {
+      playlist.innerHTML = '';
+      items.forEach((episode, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = episode.title;
+        btn.className = "block w-full text-left px-4 py-2 rounded-lg hover:bg-blue-100";
+        btn.onclick = () => {
+          audioSource.src = episode.url;
+          audioPlayer.load();
+          audioPlayer.play();
+        };
+        playlist.appendChild(btn);
+      });
+    }
+
+    // Initial load
+    loadPlaylist(episodes);
+
+    // Search functionality
+    searchInput.addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      const filtered = episodes.filter(e => e.title.toLowerCase().includes(query));
+      loadPlaylist(filtered);
+    });
+  </script>
+</body>
+</html>
