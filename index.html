@@ -1,95 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Alpro Podcast + SOP</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Alpro Weekly Podcast</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e1e;
+      color: #fff;
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+
+    .left-panel, .right-panel {
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .left-panel {
+      flex: 1;
+      background-color: #1c1c1c;
+    }
+
+    .right-panel {
+      flex: 1;
+      background-color: #2b2b2b;
+      border-left: 1px solid #444;
+    }
+
+    h1 {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      color: #1db954;
+      margin-bottom: 10px;
+    }
+
+    h1 i {
+      margin-right: 10px;
+    }
+
+    audio {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    #search {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+      background-color: #3a3a3a;
+      color: white;
+      font-size: 16px;
+    }
+
+    .episode {
+      padding: 12px 16px;
+      background-color: #3a3a3a;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .episode:hover {
+      background-color: #1db954;
+      color: #000;
+    }
+
+    iframe {
+      width: 100%;
+      height: calc(100% - 40px);
+      border: none;
+      background: white;
+      border-radius: 6px;
+    }
+
+    .sop-title {
+      color: #1db954;
+      font-size: 20px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .sop-title i {
+      margin-right: 8px;
+    }
+  </style>
 </head>
-<body class="bg-zinc-900 text-white font-sans min-h-screen p-6">
-  <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6">
-    
-    <!-- LEFT SIDE: AUDIO + PLAYLIST -->
-    <div class="w-full lg:w-1/2 bg-zinc-800 rounded-3xl shadow-lg p-6">
-      <h1 class="text-3xl font-extrabold mb-6 text-green-400">🎧 Alpro Weekly Podcast</h1>
+<body>
+  <div class="left-panel">
+    <h1><i>🎧</i> Alpro Weekly Podcast</h1>
+    <audio id="audioPlayer" controls>
+      <source src="" type="audio/mpeg">
+      Browser Anda tidak mendukung pemutar audio.
+    </audio>
+    <input type="text" id="search" placeholder="Cari episode..." />
+    <div id="playlist"></div>
+  </div>
 
-      <!-- Audio Player -->
-      <audio id="audioPlayer" controls class="w-full mb-4 rounded-xl bg-zinc-700">
-        <source id="audioSource" src="" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-
-      <!-- Search -->
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="Cari episode..."
-        class="w-full px-4 py-2 rounded-lg bg-zinc-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 mb-4"
-      />
-
-      <!-- Playlist -->
-      <div id="playlist" class="max-h-64 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800">
-        <!-- Episode list -->
-      </div>
-    </div>
-
-    <!-- RIGHT SIDE: PDF VIEWER -->
-    <div class="w-full lg:w-1/2 bg-zinc-800 rounded-3xl shadow-lg p-6">
-      <h2 class="text-2xl font-semibold mb-4 text-green-300">📄 SOP Terkait</h2>
-      <iframe
-        id="pdfViewer"
-        src=""
-        class="w-full h-[500px] rounded-lg border border-zinc-600"
-      ></iframe>
-    </div>
+  <div class="right-panel">
+    <div class="sop-title"><i>📄</i> SOP Terkait</div>
+    <iframe id="pdfViewer" src=""></iframe>
   </div>
 
   <script>
     const episodes = [
       {
         title: "Weekly Update",
-        url: "audio/weekly_update.mp3",
-        pdf: "pdfs/weekly_update_sop.pdf"
+        url: "audio/Apotek Alpro Weekly Update_140525.mp3",
+        pdf: "https://cdn.jsdelivr.net/gh/ginting719/AudioProject@main/pdf/weekly_update.pdf"
       },
       {
         title: "ABCCE",
         url: "audio/ABCCE.mp3",
-        pdf: "pdfs/ABCCE.pdf"
+        pdf: "https://cdn.jsdelivr.net/gh/ginting719/AudioProject@main/pdf/abcce.pdf"
       }
+      // Tambahkan lebih banyak episode di sini
     ];
 
-    const audioPlayer = document.getElementById("audioPlayer");
-    const audioSource = document.getElementById("audioSource");
-    const pdfViewer = document.getElementById("pdfViewer");
     const playlist = document.getElementById("playlist");
-    const searchInput = document.getElementById("searchInput");
+    const audioPlayer = document.getElementById("audioPlayer");
+    const pdfViewer = document.getElementById("pdfViewer");
+    const search = document.getElementById("search");
 
-    function loadPlaylist(items) {
+    function renderPlaylist(filtered = episodes) {
       playlist.innerHTML = "";
-      items.forEach((episode) => {
-        const btn = document.createElement("button");
-        btn.textContent = episode.title;
-        btn.className =
-          "block w-full text-left px-4 py-3 rounded-lg bg-zinc-700 hover:bg-green-600 transition-colors duration-200";
-        btn.onclick = () => {
-          audioSource.src = episode.url;
-          audioPlayer.load();
+      filtered.forEach(ep => {
+        const div = document.createElement("div");
+        div.className = "episode";
+        div.textContent = ep.title;
+        div.onclick = () => {
+          audioPlayer.src = ep.url;
           audioPlayer.play();
-          pdfViewer.src = episode.pdf;
+          pdfViewer.src = ep.pdf;
         };
-        playlist.appendChild(btn);
+        playlist.appendChild(div);
       });
     }
 
-    loadPlaylist(episodes);
-
-    searchInput.addEventListener("input", function () {
-      const query = this.value.toLowerCase();
-      const filtered = episodes.filter((e) =>
-        e.title.toLowerCase().includes(query)
-      );
-      loadPlaylist(filtered);
+    search.addEventListener("input", e => {
+      const query = e.target.value.toLowerCase();
+      const filtered = episodes.filter(ep => ep.title.toLowerCase().includes(query));
+      renderPlaylist(filtered);
     });
+
+    renderPlaylist(); // pertama kali load
   </script>
 </body>
 </html>
