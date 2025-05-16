@@ -3,30 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Alpro Podcast</title>
+  <title>Alpro Podcast + SOP</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-zinc-900 text-white font-sans min-h-screen flex items-center justify-center p-4">
-  <div class="w-full max-w-3xl bg-zinc-800 rounded-3xl shadow-lg p-6">
-    <h1 class="text-3xl font-extrabold mb-6 text-green-400">🎧 Alpro Weekly Podcast</h1>
+<body class="bg-zinc-900 text-white font-sans min-h-screen p-6">
+  <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6">
     
-    <!-- Audio Player -->
-    <audio id="audioPlayer" controls class="w-full mb-6 rounded-xl bg-zinc-700">
-      <source id="audioSource" src="" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
+    <!-- LEFT SIDE: AUDIO + PLAYLIST -->
+    <div class="w-full lg:w-1/2 bg-zinc-800 rounded-3xl shadow-lg p-6">
+      <h1 class="text-3xl font-extrabold mb-6 text-green-400">🎧 Alpro Weekly Podcast</h1>
 
-    <!-- Search Box -->
-    <input
-      id="searchInput"
-      type="text"
-      placeholder="Cari episode..."
-      class="w-full px-4 py-2 rounded-lg bg-zinc-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 mb-4"
-    />
+      <!-- Audio Player -->
+      <audio id="audioPlayer" controls class="w-full mb-4 rounded-xl bg-zinc-700">
+        <source id="audioSource" src="" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
 
-    <!-- Playlist -->
-    <div id="playlist" class="max-h-64 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800">
-      <!-- Playlist items will be inserted here -->
+      <!-- Search -->
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Cari episode..."
+        class="w-full px-4 py-2 rounded-lg bg-zinc-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 mb-4"
+      />
+
+      <!-- Playlist -->
+      <div id="playlist" class="max-h-64 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800">
+        <!-- Episode list -->
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE: PDF VIEWER -->
+    <div class="w-full lg:w-1/2 bg-zinc-800 rounded-3xl shadow-lg p-6">
+      <h2 class="text-2xl font-semibold mb-4 text-green-300">📄 SOP Terkait</h2>
+      <iframe
+        id="pdfViewer"
+        src=""
+        class="w-full h-[500px] rounded-lg border border-zinc-600"
+      ></iframe>
     </div>
   </div>
 
@@ -34,17 +48,19 @@
     const episodes = [
       {
         title: "Weekly Update",
-        url: "audio/apotek.mp3"
+        url: "audio/weekly_update.mp3",
+        pdf: "pdfs/weekly_update_sop.pdf"
       },
       {
         title: "ABCCE",
-        url: "audio/ABCCE.mp3"
-      },
-      // Tambahkan lagi jika ada episode baru
+        url: "audio/abcce.mp3",
+        pdf: "pdfs/abcce_sop.pdf"
+      }
     ];
 
     const audioPlayer = document.getElementById("audioPlayer");
     const audioSource = document.getElementById("audioSource");
+    const pdfViewer = document.getElementById("pdfViewer");
     const playlist = document.getElementById("playlist");
     const searchInput = document.getElementById("searchInput");
 
@@ -59,6 +75,7 @@
           audioSource.src = episode.url;
           audioPlayer.load();
           audioPlayer.play();
+          pdfViewer.src = episode.pdf;
         };
         playlist.appendChild(btn);
       });
