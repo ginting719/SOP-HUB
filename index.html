@@ -257,96 +257,21 @@
 </main>
 
 <script>
-  const sops = [
-    {
-      id: 1,
-      title: "SOP WA BLASTING HASIL TEST KESEHATAN",
-      category: "SALES",
-      description: "Prosedur standar untuk pengelolaan keluar masuk barang di gudang.",
-      date: "2025-02-14",
-      link: "https://drive.google.com/file/d/1_h9zRlHSxYEMxhP4IlBBcA-k0Vr4U227/view?usp=drive_link"
-    },
-    {
-      id: 2,
-      title: "SOP Pelayanan Pelanggan",
-      category: "Layanan Pelanggan",
-      description: "Langkah-langkah untuk memberikan pelayanan pelanggan yang ramah dan efektif.",
-      date: "2023-11-15",
-      link: "#"
-    },
-    {
-      id: 3,
-      title: "SOP Keamanan Data",
-      category: "TI",
-      description: "Pedoman menjaga keamanan data dan informasi perusahaan.",
-      date: "2024-04-01",
-      link: "#"
-    },
-    {
-      id: 4,
-      title: "SOP Rekrutmen Karyawan",
-      category: "SDM",
-      description: "Prosedur dalam proses perekrutan dan seleksi karyawan baru.",
-      date: "2023-07-23",
-      link: "#"
-    },
-    {
-      id: 5,
-      title: "SOP Pengelolaan Keuangan",
-      category: "Keuangan",
-      description: "Tahapan pengelolaan anggaran dan pencatatan keuangan perusahaan.",
-      date: "2023-12-05",
-      link: "#"
-    },
-    {
-      id: 6,
-      title: "SOP Audit Internal",
-      category: "Audit",
-      description: "Prosedur pelaksanaan audit internal untuk evaluasi kinerja.",
-      date: "2023-08-19",
-      link: "#"
-    },
-    {
-      id: 7,
-      title: "SOP Pelaporan Insiden Keamanan",
-      category: "TI",
-      description: "Proses pelaporan dan penanganan insiden keamanan sistem dan data.",
-      date: "2024-01-30",
-      link: "#"
-    },
-    {
-      id: 8,
-      title: "SOP Training Karyawan Baru",
-      category: "SDM",
-      description: "Rangkaian kegiatan pelatihan untuk karyawan baru agar cepat beradaptasi.",
-      date: "2023-06-12",
-      link: "#"
-    },
-    {
-      id: 9,
-      title: "SOP Pemeliharaan Mesin Produksi",
-      category: "Operasional",
-      description: "Procedur perawatan mesin produksi agar tetap dalam kondisi optimal.",
-      date: "2023-10-28",
-      link: "#"
-    },
-    {
-      id: 10,
-      title: "SOP Pengelolaan Proyek",
-      category: "Manajemen Proyek",
-      description: "Panduan pengelolaan proyek dari perencanaan hingga evaluasi.",
-      date: "2024-02-14",
-      link: "#"
-    }
-  ];
+  const sheetUrl = 'https://script.google.com/macros/s/AKfycbxPJpGEXbkoqtGQoU0yywMeaVIwYr4uZxaojNDL2wPuC4QiyebxUQ_VpOwvA5SNfEX4/exec'; // Ganti dengan URL API Anda
 
-  const sopListEl = document.getElementById('sop-list');
-  const searchInputEl = document.getElementById('search-input');
-  const categoryFilterEl = document.getElementById('category-filter');
-  const dateFilterEl = document.getElementById('date-filter');
-  const noResultsEl = document.getElementById('no-results');
+  async function fetchSOPs() {
+    const response = await fetch(sheetUrl);
+    const data = await response.json();
+    return data;
+  }
 
-  function populateCategories() {
+  async function init() {
+    const sops = await fetchSOPs();
+    populateCategories(sops);
+    renderSOPList(sops);
+  }
+
+  function populateCategories(sops) {
     const categories = Array.from(new Set(sops.map(sop => sop.category))).sort();
     categories.forEach(cat => {
       const option = document.createElement('option');
@@ -388,8 +313,7 @@
 
     let filtered = sops.filter(sop => {
       const matchesCategory = selectedCategory === 'all' || sop.category === selectedCategory;
-      const textMatch = sop.title.toLowerCase().includes(searchTerm) ||
-                        sop.description.toLowerCase().includes(searchTerm);
+      const textMatch = sop.title.toLowerCase().includes(searchTerm);
       return matchesCategory && textMatch;
     });
 
@@ -411,8 +335,8 @@
   categoryFilterEl.addEventListener('change', filterSOPs);
   dateFilterEl.addEventListener('change', filterSOPs);
 
-  populateCategories();
-  renderSOPList(sops);
+  // Initialize
+  init();
 </script>
 </body>
 </html>
