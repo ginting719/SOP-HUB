@@ -257,7 +257,12 @@
 </main>
 
 <script>
-  // JavaScript untuk Alpro SOP-Hub dengan integrasi Google Sheets API
+  /**
+ * Integrasi Google Sheets untuk SOP tanpa Apps Script
+ * Gunakan "Publish to web" Google Sheets dengan format CSV.
+ * Ganti 'sheetCsvUrl' dengan URL CSV dari Google Sheets yang dipublikasikan.
+ */
+
 const sopListEl = document.getElementById('sop-list');
 const searchInputEl = document.getElementById('search-input');
 const categoryFilterEl = document.getElementById('category-filter');
@@ -267,28 +272,48 @@ const noResultsEl = document.getElementById('no-results');
 let sops = [];
 let filteredSops = [];
 
-// Ganti URL di sini dengan URL Web App Google Apps Script Anda (Publik)
-// Contoh: const sheetUrl = 'https://script.google.com/macros/s/AKfycbxyz.../exec';
-const sheetUrl = 'https://script.google.com/macros/s/AKfycbzlVp_Dub3muCbyA0BrC4bSqeQPhJgbFSl4NaW_YdCc0dLHIEkJhVqDMnLYpR5Ad_v9/exec';
+// Ganti dengan URL CSV yang didapat dari Google Sheets "File > Publish to web"
+const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQeQYdAcL5V4QY4Uymi3d1245H_PQSXxXCXdYcm8i5mAk762e9QjAzyubZV9DzMHwWbODi0nviQobi/pub?output=csv';
+
+/**
+ * Simple CSV parser untuk parsing CSV teks ke array objek
+ * Asumsi kolom header di baris pertama
+ */
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim());
+  let data = [];
+
+  for(let i=1; i<lines.length; i++) {
+    const obj = {};
+    const currentLine = lines[i].split(',').map(c => c.trim());
+    headers.forEach((header, idx) => {
+      obj[header] = currentLine[idx] || '';
+    });
+    data.push(obj);
+  }
+  return data;
+}
 
 async function fetchSOPs() {
   try {
-    const response = await fetch(sheetUrl);
-    if (!response.ok) {
-      throw new Error('Gagal mengambil data dari Google Sheets');
-    }
-    const data = await response.json();
-    
-    // Normalisasi data jika perlu, pastikan format tanggal valid
-    return data.map(item => ({
-      title: item.title || '',
-      category: item.category || 'Uncategorized',
-      date: item.date || '',
-      link: item.link || '#',
-      description: item.description || ''
+    const response = await fetch(sheetCsvUrl);
+    if (!response.ok) throw new Error('Gagal mengambil data dari Google Sheets CSV');
+    const csvText = await response.text();
+    let data = parseCSV(csvText);
+
+    // Map sesuai gunakan kunci field lower-case to match your HTML JS code
+    data = data.map(item => ({
+      title: item.Title || item.title || '',
+      category: item.Category || item.category || 'Uncategorized',
+      date: item.Date || item.date || '',
+      link: item.Link || item.link || '#',
+      description: item.Description || item.description || ''
     }));
-  } catch (error) {
-    console.error('Error fetching SOPs:', error);
+
+    return data;
+  } catch(e) {
+    console.error('Error fetching/processing CSV:', e);
     noResultsEl.textContent = 'Gagal mengambil data SOP. Silakan coba lagi nanti.';
     noResultsEl.hidden = false;
     return [];
@@ -296,7 +321,6 @@ async function fetchSOPs() {
 }
 
 function populateCategories() {
-  // Reset dropdown selain opsi 'Semua Kategori'
   categoryFilterEl.innerHTML = '';
   const allOption = document.createElement('option');
   allOption.value = 'all';
@@ -325,19 +349,18 @@ function renderSOPList(items) {
     sopItem.setAttribute('tabindex', '0');
     sopItem.innerHTML = `
       <div class="card-top" aria-label="Judul dan logo perusahaan">
-        <h2 class="sop-title">${escapeHtml(sop.title)}</h2>
+        <h2 class="sop-title">\${escapeHtml(sop.title)}</h2>
         <img src="https://cdn.jsdelivr.net/gh/ginting719/Audio/LOGO-01.png" alt="Logo Perusahaan" class="company-logo" />
       </div>
       <div class="card-bottom">
-        <a href="${escapeHtmlAttr(sop.link)}" class="sop-link" target="_blank" rel="noopener noreferrer" aria-label="Buka detail SOP ${escapeHtmlAttr(sop.title)}">View</a>
-        <span class="sop-category">${escapeHtml(sop.category)}</span>
+        <a href="\${escapeHtmlAttr(sop.link)}" class="sop-link" target="_blank" rel="noopener noreferrer" aria-label="Buka detail SOP \${escapeHtmlAttr(sop.title)}">View</a>
+        <span class="sop-category">\${escapeHtml(sop.category)}</span>
       </div>
     `;
     sopListEl.appendChild(sopItem);
   });
 }
 
-// Fungsi filter dan sortir data sesuai input user
 function filterSOPs() {
   const searchTerm = searchInputEl.value.trim().toLowerCase();
   const selectedCategory = categoryFilterEl.value;
@@ -363,7 +386,8 @@ function filterSOPs() {
   renderSOPList(filteredSops);
 }
 
-// Escape HTML to prevent XSS
+
+// Escape HTML untuk keamanan XSS
 function escapeHtml(text) {
   if (!text) return '';
   return text.replace(/[&<>"']/g, function(m) {
@@ -377,7 +401,6 @@ function escapeHtml(text) {
   });
 }
 
-// Escape HTML attribute values
 function escapeHtmlAttr(text) {
   if (!text) return '';
   return text.replace(/["']/g, function(m) {
@@ -394,12 +417,10 @@ async function init() {
   filterSOPs();
 }
 
-// Event listeners untuk filter dan search
 searchInputEl.addEventListener('input', filterSOPs);
 categoryFilterEl.addEventListener('change', filterSOPs);
 dateFilterEl.addEventListener('change', filterSOPs);
 
-// Start aplikasi
 init();
 
 </script>
