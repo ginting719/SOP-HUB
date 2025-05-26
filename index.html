@@ -4,231 +4,449 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>SOP Index - Kumpulan SOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* Reset and Box Sizing */
+  /* Reset and Base Styles */
   *, *::before, *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
+  
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --primary-light: #dbeafe;
+    --secondary: #475569;
+    --accent: #f97316;
+    --background: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-light: #f8fafc;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --border-radius-sm: 0.375rem;
+    --border-radius-md: 0.75rem;
+    --border-radius-lg: 1.5rem;
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+  }
+  
   body {
     margin: 0;
-    font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f7f9fc;
-    color: #1f2937;
-    line-height: 1.5;
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
   }
 
+  /* Header Styling */
   header {
-    background: linear-gradient(135deg, #2c3e50 0%, #4a69ad 100%);
-    color: #f8fafc;
-    padding: 2rem 2rem 2.4rem;
+    position: relative;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: var(--text-light);
+    padding: 3rem 2rem 5rem;
     text-align: center;
-    box-shadow: 0 6px 16px rgba(44,62,80,0.75);
-    border-bottom-left-radius: 14px;
-    border-bottom-right-radius: 14px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    z-index: 1;
   }
+  
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: -1;
+  }
+  
   header h1 {
-    font-weight: 900;
-    font-size: 2.6rem;
-    letter-spacing: 3.2px;
+    font-weight: 800;
+    font-size: 2.8rem;
+    letter-spacing: 4px;
     margin: 0;
-    text-shadow: 1.8px 3px 5px rgba(0,0,0,0.35);
+    text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+  
+  header h1::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: var(--accent);
+    margin: 0.8rem auto 0;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
+  /* Main Content Styling */
   main {
     width: 100%;
-    margin: 3rem 0 5rem;
+    max-width: 1440px;
+    margin: -3rem auto 5rem;
     padding: 0 2rem;
-    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
   }
 
-  /* Filters/Search Container */
+  /* Controls Container */
+  .controls-container {
+    background: var(--card-bg);
+    padding: 1.5rem 2rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 3rem;
+  }
+
   .controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.8rem;
-    margin-bottom: 3rem;
-    justify-content: center;
+    gap: 1.25rem;
+    justify-content: space-between;
+    align-items: center;
   }
+  
   .search-input,
   .category-filter,
   .date-filter {
-    font-size: 1.05rem;
-    padding: 0.7rem 1.3rem;
-    border-radius: 28px;
-    border: 2.5px solid #34568e;
-    box-shadow: inset 0 1.5px 6px rgba(52,86,142,0.3);
-    outline-offset: 3px;
-    transition: border-color 0.35s ease, box-shadow 0.35s ease;
-    color: #172238;
-    background-color: #fefeff;
-    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--border-radius-md);
+    border: 2px solid #e2e8f0;
+    transition: all var(--transition-normal);
+    color: var(--text-primary);
+    background-color: var(--card-bg);
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
   }
+  
   .search-input {
     flex: 1 1 320px;
     min-width: 220px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cpath d='M21 21l-4.35-4.35'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 1rem) center;
+    background-size: 20px;
+    padding-right: 3rem;
   }
+  
   .search-input::placeholder {
-    color: #9ca3af;
+    color: var(--text-secondary);
     font-style: italic;
+    opacity: 0.7;
   }
-  .search-input:focus,
-  .category-filter:focus,
-  .date-filter:focus {
-    border-color: #1f4068;
-    box-shadow: 0 0 10px 2px rgba(31,64,104,0.5);
-    background-color: #fff;
-    outline: none;
-  }
+  
   .category-filter,
   .date-filter {
     flex: 0 1 210px;
-    box-shadow: 0 3px 8px rgba(52,86,142,0.35);
-    font-weight: 600;
-    background-image:
-      linear-gradient(45deg, transparent 55%, #34568e 55%),
-      linear-gradient(135deg, #34568e 45%, transparent 45%),
-      radial-gradient(#34568e 70%, transparent 73%);
-    background-position:
-      calc(100% - 22px) calc(1em + 2px),
-      calc(100% - 14px) calc(1em + 2px),
-      calc(100% - 6px) 0.5em;
-    background-size: 6px 6px, 6px 6px, 1.7em 1.7em;
+    font-weight: 500;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
+    background-position: calc(100% - 1rem) center;
+    background-size: 20px;
+    padding-right: 3rem;
   }
-  .category-filter:hover,
-  .date-filter:hover,
+  
+  .search-input:focus,
   .category-filter:focus,
   .date-filter:focus {
-    background-color: #e3eaf7;
-    border-color: #1f4068;
-    box-shadow: 0 6px 14px rgba(31,64,104,0.7);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    outline: none;
+  }
+  
+  .search-input:hover,
+  .category-filter:hover,
+  .date-filter:hover {
+    border-color: var(--primary-light);
   }
 
-  /* SOP List Cards */
+  /* SOP List Grid */
   .sop-list {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.4rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
   }
-  @media (min-width: 700px) {
-    .sop-list {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2.8rem;
-    }
-  }
+  
+  /* SOP Item Card */
   .sop-item {
-    background: white;
-    border-radius: 18px;
-    box-shadow:
-      0 10px 22px rgba(44,62,80,0.1),
-      0 3px 9px rgba(52,86,142,0.18);
-    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s ease;
+    background: var(--card-bg);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
     cursor: default;
-    padding: 1.6rem 2rem 2rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.8);
   }
+  
   .sop-item:hover,
   .sop-item:focus-within {
-    box-shadow:
-      0 16px 38px rgba(44,62,80,0.17),
-      0 6px 18px rgba(52,86,142,0.28);
-    transform: translateY(-8px);
-    outline: none;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-6px);
+    border-color: var(--primary-light);
+  }
+  
+  .sop-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-normal);
+  }
+  
+  .sop-item:hover::before,
+  .sop-item:focus-within::before {
+    transform: scaleX(1);
   }
 
-  /* Top center: title and logo */
+  /* Card Top Section */
   .card-top {
     text-align: center;
-    margin-bottom: 1.8rem;
-    user-select: none;
+    margin-bottom: 2rem;
+    position: relative;
   }
+  
   .sop-title {
-    font-weight: 900;
-    font-size: 1.4rem;
-    color: #2c3e50;
-    margin: 0 0 0.7rem 0;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.3;
   }
+  
   .company-logo {
     width: 100px;
     height: 100px;
     object-fit: contain;
-    filter: drop-shadow(0 0 1px rgba(44,62,80,0.35));
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    transition: transform var(--transition-normal);
+  }
+  
+  .sop-item:hover .company-logo {
+    transform: scale(1.05);
   }
 
-  /* Bottom row: link left, category right */
+  /* Card Bottom Section */
   .card-bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    margin-top: 1rem;
   }
+  
   .sop-link {
-    background: #1f4068;
-    color: #e7e8fc;
-    padding: 0.58rem 1.4rem;
-    border-radius: 14px;
+    background: var(--primary);
+    color: var(--text-light);
+    padding: 0.65rem 1.5rem;
+    border-radius: var(--border-radius-sm);
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 0.95rem;
-    transition: background-color 0.38s ease, box-shadow 0.38s ease;
-    box-shadow: 0 8px 20px rgba(31,64,104,0.52);
+    transition: all var(--transition-normal);
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
     user-select: none;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     min-width: 100px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
   }
+  
+  .sop-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--primary-dark);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-normal);
+    z-index: -1;
+  }
+  
+  .sop-link:hover::before,
+  .sop-link:focus::before {
+    transform: scaleX(1);
+  }
+  
   .sop-link:hover,
   .sop-link:focus {
-    background-color: #2c3e50;
-    box-shadow: 0 12px 28px rgba(44,62,80,0.82);
+    box-shadow: 0 6px 12px rgba(37, 99, 235, 0.35);
+    transform: translateY(-2px);
     outline: none;
   }
-
+  
   .sop-category {
-    background: #f5f5f5;
-    color: #000000;
-    border-radius: 14px;
-    padding: 0.58rem 1.4rem;
-    font-size: 0.70rem;
-    font-weight: 700;
-    letter-spacing: 0.07em;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-radius: var(--border-radius-sm);
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    box-shadow: 0 3px 9px rgba(52,86,142,0.42);
     user-select: none;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     min-width: 100px;
     height: 39px;
+    transition: all var(--transition-normal);
+  }
+  
+  .sop-item:hover .sop-category {
+    background: rgba(219, 234, 254, 0.6);
   }
 
-  /* No SOP results */
+  /* No Results Message */
   .no-results {
-    color: #9ca3af;
+    color: var(--text-secondary);
     font-style: italic;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 1.3rem;
     text-align: center;
     margin-top: 5rem;
-    user-select: none;
+    padding: 3rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* Loading State */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    gap: 1.5rem;
+  }
+  
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--primary-light);
+    border-top: 5px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .loading-text {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
-  /* Focus outlines for accessibility */
-  .search-input:focus,
-  .category-filter:focus,
-  .date-filter:focus,
-  .sop-link:focus {
-    outline-offset: 4px;
-    outline: 3px solid #34568e;
-    outline-radius: 14px;
+  /* Focus Styles for Accessibility */
+  a:focus,
+  button:focus,
+  input:focus,
+  select:focus {
+    outline: 3px solid rgba(37, 99, 235, 0.4);
+    outline-offset: 2px;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    header {
+      padding: 2rem 1.5rem 4rem;
+    }
+    
+    header h1 {
+      font-size: 2.3rem;
+    }
+    
+    main {
+      padding: 0 1.5rem;
+      margin-top: -2.5rem;
+    }
+    
+    .controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .search-input,
+    .category-filter,
+    .date-filter {
+      width: 100%;
+      flex: 1 1 100%;
+    }
+    
+    .sop-item {
+      padding: 1.5rem;
+    }
+  }
+
+  /* Animation for Cards */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .sop-item {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .sop-list > .sop-item:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  
+  .sop-list > .sop-item:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  
+  .sop-list > .sop-item:nth-child(4) {
+    animation-delay: 0.3s;
+  }
+  
+  .sop-list > .sop-item:nth-child(5) {
+    animation-delay: 0.4s;
+  }
+  
+  .sop-list > .sop-item:nth-child(n+6) {
+    animation-delay: 0.5s;
   }
 </style>
 </head>
@@ -238,18 +456,25 @@
 </header>
 
 <main>
-  <div class="controls">
-    <input type="search" id="search-input" class="search-input" placeholder="Cari SOP, IK, atau MEMO..." aria-label="Search SOPs" />
-    <select id="category-filter" class="category-filter" aria-label="Filter by category">
-      <option value="all">Semua Kategori</option>
-    </select>
-    <select id="date-filter" class="date-filter" aria-label="Sort by date">
-      <option value="newest">Paling Baru</option>
-      <option value="oldest">Paling Lama</option>
-    </select>
+  <div class="controls-container">
+    <div class="controls">
+      <input type="search" id="search-input" class="search-input" placeholder="Cari SOP, IK, atau MEMO..." aria-label="Search SOPs" />
+      <select id="category-filter" class="category-filter" aria-label="Filter by category">
+        <option value="all">Semua Kategori</option>
+      </select>
+      <select id="date-filter" class="date-filter" aria-label="Sort by date">
+        <option value="newest">Paling Baru</option>
+        <option value="oldest">Paling Lama</option>
+      </select>
+    </div>
   </div>
 
-  <section class="sop-list" id="sop-list" aria-live="polite" aria-relevant="additions removals">
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Memuat data SOP...</div>
+  </div>
+
+  <section class="sop-list" id="sop-list" aria-live="polite" aria-relevant="additions removals" style="display: none;">
     <!-- SOP items inserted here -->
   </section>
 
@@ -263,6 +488,7 @@ const searchInputEl = document.getElementById('search-input');
 const categoryFilterEl = document.getElementById('category-filter');
 const dateFilterEl = document.getElementById('date-filter');
 const noResultsEl = document.getElementById('no-results');
+const loadingEl = document.getElementById('loading');
 
 let sops = [];
 let filteredSops = [];
@@ -291,6 +517,7 @@ async function fetchSOPs() {
     console.error('Error fetching SOPs:', error);
     noResultsEl.textContent = 'Gagal mengambil data SOP. Silakan coba lagi nanti.';
     noResultsEl.hidden = false;
+    loadingEl.style.display = 'none';
     return [];
   }
 }
@@ -314,15 +541,22 @@ function populateCategories() {
 
 function renderSOPList(items) {
   sopListEl.innerHTML = '';
+  
   if (items.length === 0) {
+    sopListEl.style.display = 'none';
     noResultsEl.hidden = false;
     return;
   }
+  
+  sopListEl.style.display = 'grid';
   noResultsEl.hidden = true;
-  items.forEach(sop => {
+  
+  items.forEach((sop, index) => {
     const sopItem = document.createElement('article');
     sopItem.className = 'sop-item';
     sopItem.setAttribute('tabindex', '0');
+    sopItem.style.animationDelay = `${index * 0.1}s`;
+    
     sopItem.innerHTML = `
       <div class="card-top" aria-label="Judul dan logo perusahaan">
         <h2 class="sop-title">${escapeHtml(sop.title)}</h2>
@@ -389,9 +623,17 @@ function escapeHtmlAttr(text) {
 }
 
 async function init() {
-  sops = await fetchSOPs();
-  populateCategories();
-  filterSOPs();
+  try {
+    sops = await fetchSOPs();
+    populateCategories();
+    loadingEl.style.display = 'none';
+    filterSOPs();
+  } catch (error) {
+    console.error('Error initializing:', error);
+    loadingEl.style.display = 'none';
+    noResultsEl.textContent = 'Terjadi kesalahan saat memuat data. Silakan muat ulang halaman.';
+    noResultsEl.hidden = false;
+  }
 }
 
 // Event listeners untuk filter dan search
